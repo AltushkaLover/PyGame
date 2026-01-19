@@ -1,0 +1,241 @@
+{% extends "base.html" %}
+{% block title %}Уроки - Python Master{% endblock %}
+{% block content %}
+<div style="max-width: 1200px; margin: 0 auto; padding: 20px;">
+    <!-- Приветствие -->
+    <div style="margin-bottom: 30px;">
+        <h1>Привет, {{ user.username }}! 👋</h1>
+        <p style="color: #666; font-size: 18px;">Добро пожаловать в Python Master</p>
+
+        <!-- Статистика -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 25px;">
+            <div style="background: white; border-radius: 10px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); text-align: center;">
+                <div style="font-size: 24px; color: #4a6cf7; font-weight: bold;">{{ user.experience }}</div>
+                <div style="color: #666; font-size: 14px;">Опыт (XP)</div>
+            </div>
+
+            <div style="background: white; border-radius: 10px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); text-align: center;">
+                <div style="font-size: 24px; color: #ff9800; font-weight: bold;">{{ user.level }}</div>
+                <div style="color: #666; font-size: 14px;">Уровень</div>
+            </div>
+
+            <div style="background: white; border-radius: 10px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); text-align: center;">
+                <div style="font-size: 24px; color: #4caf50; font-weight: bold;">{{ completed }}/{{ total }}</div>
+                <div style="color: #666; font-size: 14px;">Уроков завершено</div>
+            </div>
+
+            <div style="background: white; border-radius: 10px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); text-align: center;">
+                <div style="font-size: 24px; color: #9c27b0; font-weight: bold;">{{ progress }}%</div>
+                <div style="color: #666; font-size: 14px;">Общий прогресс</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Прогресс-бар уровня -->
+    <div style="background: white; border-radius: 10px; padding: 25px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 30px;">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+            <span style="font-weight: bold;">Уровень {{ user.level }}</span>
+            <span style="color: #666;">{{ user.experience % 100 }}/100 XP до следующего уровня</span>
+        </div>
+        <div style="height: 12px; background: #e9ecef; border-radius: 6px; overflow: hidden;">
+            <div style="height: 100%; background: linear-gradient(90deg, #4a6cf7, #764ba2); width: {{ user.experience % 100 }}%; border-radius: 6px;"></div>
+        </div>
+    </div>
+
+    <!-- Уроки по уровням сложности -->
+    <h2 style="margin-bottom: 25px;">🎯 Доступные уроки</h2>
+
+    {% if levels %}
+        {% for difficulty, diff_lessons in levels.items()|sort %}
+        <div style="margin-bottom: 40px;">
+            <h3 style="margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #eee;">
+                {% if difficulty == 1 %}
+                    🟢 Начальный уровень ({{ diff_lessons|length }} уроков)
+                {% elif difficulty == 2 %}
+                    🔵 Базовый уровень ({{ diff_lessons|length }} уроков)
+                {% elif difficulty == 3 %}
+                    🟡 Средний уровень ({{ diff_lessons|length }} уроков)
+                {% elif difficulty == 4 %}
+                    🟣 Продвинутый уровень ({{ diff_lessons|length }} уроков)
+                {% else %}
+                    🔴 Экспертный уровень ({{ diff_lessons|length }} уроков)
+                {% endif %}
+            </h3>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px;">
+                {% for lesson in diff_lessons %}
+                <div style="background: white; border-radius: 10px; padding: 25px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                            border-left: 4px solid
+                            {% if lesson.difficulty == 1 %}#4caf50
+                            {% elif lesson.difficulty == 2 %}#2196f3
+                            {% elif lesson.difficulty == 3 %}#ff9800
+                            {% elif lesson.difficulty == 4 %}#9c27b0
+                            {% else %}#f44336
+                            {% endif %};">
+
+                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 15px;">
+                        <div>
+                            <h4 style="margin: 0 0 5px 0; color: #333;">
+                                Урок {{ lesson.order_num }}: {{ lesson.title }}
+                            </h4>
+                            <p style="color: #666; margin: 0; font-size: 14px;">
+                                {{ lesson.description }}
+                            </p>
+                        </div>
+
+                        {% if lesson.completed %}
+                        <span style="background: #4caf50; color: white; padding: 5px 10px; border-radius: 15px; font-size: 12px; font-weight: bold;">
+                            ✅ Завершен
+                        </span>
+                        {% endif %}
+                    </div>
+
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+                        <span style="background: #ff9800; color: white; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: bold;">
+                            +{{ lesson.xp_reward }} XP
+                        </span>
+
+                        <span style="color: #666; font-size: 13px;">
+                            <i class="fas fa-clock"></i>
+                            {% if lesson.difficulty == 1 %}10-15 мин
+                            {% elif lesson.difficulty == 2 %}15-20 мин
+                            {% elif lesson.difficulty == 3 %}20-25 мин
+                            {% elif lesson.difficulty == 4 %}25-30 мин
+                            {% else %}30-40 мин
+                            {% endif %}
+                        </span>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div style="color: #666; font-size: 13px;">
+                            {% if lesson.completed %}
+                            <span style="color: #4caf50;">
+                                <i class="fas fa-trophy"></i> Получено: {{ lesson.score }} XP
+                            </span>
+                            {% else %}
+                            <span>Награда за выполнение</span>
+                            {% endif %}
+                        </div>
+
+                        {% if lesson.completed %}
+                        <a href="/lesson/{{ lesson.id }}" class="btn btn-secondary" style="padding: 8px 16px; font-size: 14px;">
+                            Повторить
+                        </a>
+                        {% else %}
+                        <a href="/lesson/{{ lesson.id }}" class="btn btn-primary" style="padding: 8px 16px; font-size: 14px;">
+                            Начать урок
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+    <div style="background: white; border-radius: 10px; padding: 50px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+        <div style="font-size: 48px; color: #ddd; margin-bottom: 20px;">📚</div>
+        <h3 style="color: #666; margin-bottom: 15px;">Пока нет уроков</h3>
+        <p style="color: #999;">Уроки скоро появятся</p>
+    </div>
+    {% endif %}
+
+    <!-- Мотивационное сообщение -->
+    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 10px; padding: 30px; margin-top: 50px; text-align: center;">
+        <h3 style="margin-bottom: 15px;">
+            {% if completed == 0 %}
+            Начни свой путь в программировании сегодня! 🚀
+            {% elif completed < total %}
+            Продолжай в том же духе! Ты на пути к успеху! 💪
+            {% else %}
+            Поздравляем! Ты завершил все уроки! 🏆
+            {% endif %}
+        </h3>
+        <p style="opacity: 0.9; margin-bottom: 20px;">
+            {% if completed == 0 %}
+            Начни с первого урока и открой для себя мир Python
+            {% elif completed < total %}
+            Ты завершил {{ completed }} из {{ total }} уроков. Осталось всего {{ total - completed }}!
+            {% else %}
+            Ты освоил основы Python! Теперь можно переходить к более сложным проектам
+            {% endif %}
+        </p>
+
+        {% if completed < total %}
+            {% set next_lesson = none %}
+            {% for difficulty, diff_lessons in levels.items()|sort %}
+                {% for lesson in diff_lessons %}
+                    {% if not lesson.completed and not next_lesson %}
+                        {% set next_lesson = lesson %}
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+
+            {% if next_lesson %}
+            <a href="/lesson/{{ next_lesson.id }}" class="btn" style="background: white; color: #667eea; padding: 12px 30px; border-radius: 25px; text-decoration: none; font-weight: bold;">
+                {% if completed == 0 %}
+                Начать первый урок
+                {% else %}
+                Продолжить с урока {{ next_lesson.order_num }}
+                {% endif %}
+            </a>
+            {% endif %}
+        {% endif %}
+    </div>
+</div>
+
+<style>
+    .btn {
+        display: inline-block;
+        padding: 10px 20px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-weight: bold;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .btn-primary {
+        background: #4a6cf7;
+        color: white;
+    }
+
+    .btn-primary:hover {
+        background: #3a5ce5;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(74, 108, 247, 0.3);
+    }
+
+    .btn-secondary {
+        background: #6c757d;
+        color: white;
+    }
+
+    .btn-secondary:hover {
+        background: #5a6268;
+        transform: translateY(-2px);
+    }
+
+    h1, h2, h3, h4 {
+        color: #333;
+    }
+</style>
+
+<script>
+    // Анимация появления карточек
+    document.addEventListener('DOMContentLoaded', function() {
+        const lessonCards = document.querySelectorAll('div[style*="border-left: 4px solid"]');
+        lessonCards.forEach((card, index) => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+
+            setTimeout(() => {
+                card.style.transition = 'opacity 0.5s, transform 0.5s';
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            }, index * 100);
+        });
+    });
+</script>
+{% endblock %}

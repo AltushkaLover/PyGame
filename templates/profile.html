@@ -1,0 +1,289 @@
+{% extends "base.html" %}
+{% block title %}Профиль - Python Master{% endblock %}
+{% block content %}
+<div>
+    <!-- Заголовок профиля -->
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 40px; flex-wrap: wrap; gap: 20px;">
+        <div>
+            <h1 style="color: var(--dark); margin-bottom: 10px; font-size: 2.5rem;">
+                <i class="fas fa-user-circle" style="color: var(--primary); margin-right: 15px;"></i>
+                Ваш профиль
+            </h1>
+            <p style="color: var(--gray); font-size: 1.1rem;">Детальная статистика и достижения</p>
+        </div>
+
+        <div style="background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; padding: 15px 25px; border-radius: 15px; text-align: center; min-width: 180px;">
+            <div style="font-size: 12px; opacity: 0.9;">Текущий ранг</div>
+            <div style="font-size: 28px; font-weight: 700;">
+                {% if user.level <= 5 %}
+                    🌱 Новичок
+                {% elif user.level <= 10 %}
+                    📘 Ученик
+                {% elif user.level <= 15 %}
+                    ⚡ Разработчик
+                {% elif user.level <= 20 %}
+                    🚀 Эксперт
+                {% elif user.level <= 25 %}
+                    🎯 Мастер
+                {% else %}
+                    👑 Гуру Python
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Основная информация -->
+    <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 30px; margin-bottom: 40px;">
+        <!-- Аватар и основная информация -->
+        <div class="card" style="text-align: center;">
+            <div style="width: 120px; height: 120px; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 48px; color: white;">
+                <i class="fas fa-user"></i>
+            </div>
+            <h2 style="color: var(--dark); margin-bottom: 10px;">{{ user.username }}</h2>
+            <p style="color: var(--gray); margin-bottom: 20px;">
+                <i class="fas fa-calendar" style="margin-right: 5px;"></i>
+                Участник с {{ user.created_at[:10] if user.created_at else 'недавно' }}
+            </p>
+            <div class="level-badge" style="font-size: 18px; padding: 10px 20px; display: inline-block;">
+                <i class="fas fa-star"></i> Уровень {{ user.level }}
+            </div>
+
+            {% if user.daily_streak and user.daily_streak > 0 %}
+            <div style="margin-top: 20px; padding: 10px; background: rgba(245, 158, 11, 0.1); border-radius: 10px; display: inline-flex; align-items: center; gap: 8px;">
+                <i class="fas fa-fire" style="color: var(--warning);"></i>
+                <span style="font-weight: 600; color: var(--warning);">{{ user.daily_streak }} дней</span>
+                <span style="color: var(--gray); font-size: 14px;">подряд</span>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Детальная статистика -->
+        <div>
+            <h3 style="color: var(--dark); margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid #e2e8f0;">
+                <i class="fas fa-chart-bar" style="color: var(--primary); margin-right: 10px;"></i>
+                Статистика обучения
+            </h3>
+
+            <div class="stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px;">
+                <div class="stat-card" style="text-align: center; padding: 20px; background: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                    <div class="stat-icon" style="font-size: 32px; color: var(--primary); margin-bottom: 12px;">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <div class="stat-number" style="font-size: 36px; font-weight: 700; color: var(--dark); margin-bottom: 8px;">
+                        {{ user.experience }}
+                    </div>
+                    <div class="stat-label" style="color: var(--gray); font-size: 14px;">Всего опыта (XP)</div>
+                </div>
+
+                <div class="stat-card" style="text-align: center; padding: 20px; background: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                    <div class="stat-icon" style="font-size: 32px; color: var(--success); margin-bottom: 12px;">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stat-number" style="font-size: 36px; font-weight: 700; color: var(--dark); margin-bottom: 8px;">
+                        {{ stats.completed_lessons or 0 }}
+                    </div>
+                    <div class="stat-label" style="color: var(--gray); font-size: 14px;">Уроков завершено</div>
+                </div>
+
+                <div class="stat-card" style="text-align: center; padding: 20px; background: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                    <div class="stat-icon" style="font-size: 32px; color: var(--warning); margin-bottom: 12px;">
+                        <i class="fas fa-gem"></i>
+                    </div>
+                    <div class="stat-number" style="font-size: 36px; font-weight: 700; color: var(--dark); margin-bottom: 8px;">
+                        {{ stats.total_score or 0 }}
+                    </div>
+                    <div class="stat-label" style="color: var(--gray); font-size: 14px;">XP заработано</div>
+                </div>
+
+                <div class="stat-card" style="text-align: center; padding: 20px; background: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                    <div class="stat-icon" style="font-size: 32px; color: #3b82f6; margin-bottom: 12px;">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="stat-number" style="font-size: 36px; font-weight: 700; color: var(--dark); margin-bottom: 8px;">
+                        {{ stats.avg_score|int if stats.avg_score else 0 }}
+                    </div>
+                    <div class="stat-label" style="color: var(--gray); font-size: 14px;">Средний XP за урок</div>
+                </div>
+            </div>
+
+            <!-- Прогресс до следующего уровня -->
+            <div class="card" style="margin-bottom: 20px;">
+                <h4 style="color: var(--dark); margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+                    <i class="fas fa-arrow-up" style="color: var(--primary);"></i>
+                    Прогресс до уровня {{ user.level + 1 }}
+                </h4>
+                <div class="progress-container">
+                    <div class="progress-label" style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; color: var(--gray);">
+                        <span>{{ user.experience % 100 }}/100 XP</span>
+                        <span>Осталось: {{ 100 - (user.experience % 100) }} XP</span>
+                    </div>
+                    <div class="progress-bar" style="width: 100%; height: 12px; background: #e2e8f0; border-radius: 6px; overflow: hidden;">
+                        <div class="progress-fill" style="height: 100%; background: linear-gradient(90deg, var(--primary), var(--secondary)); border-radius: 6px; width: {{ user.experience % 100 }}%;"></div>
+                    </div>
+                </div>
+                <p style="color: var(--gray); font-size: 14px; margin-top: 10px;">
+                    <i class="fas fa-info-circle" style="margin-right: 5px;"></i>
+                    Вы получаете опыт за каждый пройденный урок. Каждые 100 XP повышают ваш уровень.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Прогресс по уровням сложности -->
+    {% if difficulty_stats %}
+    <div class="card">
+        <h3 style="color: var(--dark); margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid #e2e8f0;">
+            <i class="fas fa-signal" style="color: var(--primary); margin-right: 10px;"></i>
+            Прогресс по уровням сложности
+        </h3>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+            {% for stat in difficulty_stats %}
+            <div style="background: #f8fafc; padding: 20px; border-radius: 12px; border-left: 4px solid
+                {% if stat.difficulty == 1 %}var(--success)
+                {% elif stat.difficulty == 2 %}#3b82f6
+                {% elif stat.difficulty == 3 %}var(--warning)
+                {% elif stat.difficulty == 4 %}#8b5cf6
+                {% elif stat.difficulty == 5 %}var(--danger)
+                {% else %}var(--primary){% endif %};">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                    <div>
+                        <h4 style="color: var(--dark); margin-bottom: 5px;">
+                            {% if stat.difficulty == 1 %}🌱 Начинающий
+                            {% elif stat.difficulty == 2 %}📘 Простой
+                            {% elif stat.difficulty == 3 %}⚡ Средний
+                            {% elif stat.difficulty == 4 %}🚀 Сложный
+                            {% elif stat.difficulty == 5 %}🎯 Эксперт
+                            {% endif %}
+                        </h4>
+                        <p style="color: var(--gray); font-size: 14px;">Уроки уровня {{ stat.difficulty }}</p>
+                    </div>
+                    <div style="font-size: 24px; font-weight: 700; color:
+                        {% if stat.difficulty == 1 %}var(--success)
+                        {% elif stat.difficulty == 2 %}#3b82f6
+                        {% elif stat.difficulty == 3 %}var(--warning)
+                        {% elif stat.difficulty == 4 %}#8b5cf6
+                        {% elif stat.difficulty == 5 %}var(--danger)
+                        {% else %}var(--primary){% endif %}">
+                        {{ stat.completed or 0 }}/{{ stat.total or 0 }}
+                    </div>
+                </div>
+
+                <div class="progress-bar" style="width: 100%; height: 8px; background: #e2e8f0; border-radius: 4px; overflow: hidden; margin-bottom: 10px;">
+                    <div class="progress-fill" style="height: 100%; background:
+                        {% if stat.difficulty == 1 %}var(--success)
+                        {% elif stat.difficulty == 2 %}#3b82f6
+                        {% elif stat.difficulty == 3 %}var(--warning)
+                        {% elif stat.difficulty == 4 %}#8b5cf6
+                        {% elif stat.difficulty == 5 %}var(--danger)
+                        {% else %}var(--primary){% endif %};
+                        border-radius: 4px; width: {% if stat.total > 0 %}{{ (stat.completed / stat.total * 100) }}{% else %}0{% endif %}%;">
+                    </div>
+                </div>
+
+                <div style="text-align: center; color: var(--gray); font-size: 14px;">
+                    {% if stat.total > 0 %}
+                        {{ (stat.completed / stat.total * 100)|int }}% завершено
+                    {% else %}
+                        Нет уроков
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Ежедневная активность -->
+    <div class="card" style="margin-top: 30px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h3 style="color: var(--dark); display: flex; align-items: center; gap: 10px;">
+                <i class="fas fa-calendar-check" style="color: var(--success);"></i>
+                Ежедневная активность
+            </h3>
+
+            {% if user.daily_streak and user.daily_streak > 0 %}
+            <div style="background: linear-gradient(135deg, #f59e0b, #d97706); color: white; padding: 8px 16px; border-radius: 20px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
+                <i class="fas fa-fire"></i> Серия: {{ user.daily_streak }} дней
+            </div>
+            {% endif %}
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 15px;">
+            <div style="display: flex; align-items: center; gap: 15px; padding: 15px; background: rgba(245, 158, 11, 0.05); border-radius: 10px;">
+                <div style="font-size: 24px; color: var(--warning);">🔥</div>
+                <div style="flex: 1;">
+                    <div style="font-weight: 600; color: var(--dark);">
+                        {% if user.daily_streak and user.daily_streak >= 7 %}
+                        Отличная серия! Не прерывайте её!
+                        {% elif user.daily_streak and user.daily_streak > 0 %}
+                        Продолжайте в том же духе!
+                        {% else %}
+                        Начните свою серию обучения!
+                        {% endif %}
+                    </div>
+                    <div style="font-size: 14px; color: var(--gray);">
+                        {% if user.daily_streak and user.daily_streak > 0 %}
+                        Вы учитесь {{ user.daily_streak }} дней подряд
+                        {% else %}
+                        Заходите каждый день для получения бонусов
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px;">
+                <div style="text-align: center; padding: 15px; background: rgba(16, 185, 129, 0.05); border-radius: 10px;">
+                    <div style="font-size: 20px; font-weight: 700; color: var(--success);">
+                        +10%
+                    </div>
+                    <div style="font-size: 12px; color: var(--gray);">За 3 дня подряд</div>
+                </div>
+
+                <div style="text-align: center; padding: 15px; background: rgba(16, 185, 129, 0.05); border-radius: 10px;">
+                    <div style="font-size: 20px; font-weight: 700; color: var(--success);">
+                        +20%
+                    </div>
+                    <div style="font-size: 12px; color: var(--gray);">За 7 дней подряд</div>
+                </div>
+
+                <div style="text-align: center; padding: 15px; background: rgba(16, 185, 129, 0.05); border-radius: 10px;">
+                    <div style="font-size: 20px; font-weight: 700; color: var(--success);">
+                        +50%
+                    </div>
+                    <div style="font-size: 12px; color: var(--gray);">За 30 дней подряд</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Навигация -->
+    <div style="display: flex; gap: 20px; margin-top: 40px; flex-wrap: wrap;">
+        <a href="/dashboard" class="btn btn-primary" style="padding: 16px 30px;">
+            <i class="fas fa-arrow-left"></i> Вернуться к обучению
+        </a>
+
+        <a href="/leaderboard" class="btn btn-secondary" style="padding: 16px 30px;">
+            <i class="fas fa-trophy"></i> Таблица лидеров
+        </a>
+
+        <a href="/achievements" class="btn btn-secondary" style="padding: 16px 30px;">
+            <i class="fas fa-award"></i> Достижения
+        </a>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Анимация прогресс-баров
+        const progressBars = document.querySelectorAll('.progress-fill');
+        progressBars.forEach(bar => {
+            const width = bar.style.width;
+            bar.style.width = '0%';
+            setTimeout(() => {
+                bar.style.width = width;
+            }, 500);
+        });
+    });
+</script>
+{% endblock %}

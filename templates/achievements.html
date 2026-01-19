@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}Достижения - Python Master{% endblock %}
+{% block content %}
+<div>
+    <h1 style="margin-bottom: 10px;">Ваши достижения</h1>
+    <p style="color: #666; margin-bottom: 30px;">Собрано: {{ achievements|length }} из 8</p>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 40px;">
+        <div class="card" style="text-align: center;">
+            <div style="font-size: 36px; margin-bottom: 10px;">🎓</div>
+            <h3>{{ completed }} уроков</h3>
+            <p>Завершено</p>
+        </div>
+
+        <div class="card" style="text-align: center;">
+            <div style="font-size: 36px; margin-bottom: 10px;">⚡</div>
+            <h3>{{ user.experience }} XP</h3>
+            <p>Всего опыта</p>
+        </div>
+
+        <div class="card" style="text-align: center;">
+            <div style="font-size: 36px; margin-bottom: 10px;">⭐</div>
+            <h3>Уровень {{ user.level }}</h3>
+            <p>Текущий уровень</p>
+        </div>
+    </div>
+
+    <h2 style="margin-bottom: 20px;">Ваши награды</h2>
+
+    {% if achievements %}
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px;">
+        {% for icon, name, desc, type in achievements %}
+        <div class="card" style="border-left: 4px solid
+            {% if type == 'bronze' %}#cd7f32
+            {% elif type == 'silver' %}#c0c0c0
+            {% elif type == 'gold' %}#ffd700
+            {% else %}#e5e4e2
+            {% endif %};">
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <div style="font-size: 24px;">{{ icon }}</div>
+                <div>
+                    <h4 style="margin-bottom: 5px;">{{ name }}</h4>
+                    <p style="color: #666; font-size: 14px;">{{ desc }}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="card" style="text-align: center; padding: 40px;">
+        <div style="font-size: 48px; color: #ddd; margin-bottom: 20px;">🏆</div>
+        <h3>Пока нет достижений</h3>
+        <p style="color: #666; margin: 15px 0;">Начните проходить уроки, чтобы получить достижения!</p>
+        <a href="/dashboard" class="btn btn-primary">Начать обучение</a>
+    </div>
+    {% endif %}
+
+    <div style="margin-top: 40px;">
+        <a href="/dashboard" class="btn btn-secondary">← К урокам</a>
+    </div>
+</div>
+{% endblock %}

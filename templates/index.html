@@ -1,0 +1,262 @@
+{% extends "base.html" %}
+{% block title %}🐍 Python Master - Интерактивное обучение Python{% endblock %}
+{% block content %}
+<div class="hero-section text-center animate-fade-in" style="padding: 100px 0;">
+    <div class="floating-element" style="width: 200px; height: 200px; top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0.1;"></div>
+
+    <div style="position: relative; z-index: 1;">
+        <h1 style="font-size: 3.5rem; margin-bottom: 20px; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+            🐍 Python Master
+        </h1>
+
+        <p style="font-size: 1.5rem; color: var(--gray); margin-bottom: 40px; max-width: 700px; margin-left: auto; margin-right: auto;">
+            Интерактивная платформа для изучения Python с нуля до эксперта
+        </p>
+
+        <div class="decorative-line mb-4"></div>
+
+        <div style="display: flex; gap: 20px; justify-content: center; margin-bottom: 60px; flex-wrap: wrap;">
+            {% if 'user_id' in session %}
+                <a href="/dashboard" class="btn btn-primary btn-lg animate-pulse">
+                    <i class="fas fa-rocket"></i>
+                    Продолжить обучение
+                </a>
+                <a href="/leaderboard" class="btn btn-accent btn-lg">
+                    <i class="fas fa-trophy"></i>
+                    Рейтинг игроков
+                </a>
+            {% else %}
+                <a href="/register" class="btn btn-primary btn-lg animate-pulse">
+                    <i class="fas fa-play-circle"></i>
+                    Начать бесплатно
+                </a>
+                <a href="/login" class="btn btn-outline btn-lg">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Войти в аккаунт
+                </a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<div class="features-section mt-4">
+    <div class="grid grid-cols-4 gap-6">
+        <div class="card text-center card-hover">
+            <div class="icon-circle icon-circle-primary animate-float">
+                <i class="fas fa-code"></i>
+            </div>
+            <h3 style="margin-bottom: 10px;">35+ Уроков</h3>
+            <p style="color: var(--gray); font-size: 14px;">От основ до продвинутых тем с постепенным усложнением</p>
+        </div>
+
+        <div class="card text-center card-hover">
+            <div class="icon-circle icon-circle-success animate-float" style="animation-delay: 1s;">
+                <i class="fas fa-gamepad"></i>
+            </div>
+            <h3 style="margin-bottom: 10px;">Геймификация</h3>
+            <p style="color: var(--gray); font-size: 14px;">Опыт, уровни, достижения и таблица лидеров</p>
+        </div>
+
+        <div class="card text-center card-hover">
+            <div class="icon-circle icon-circle-warning animate-float" style="animation-delay: 2s;">
+                <i class="fas fa-bolt"></i>
+            </div>
+            <h3 style="margin-bottom: 10px;">Практика в браузере</h3>
+            <p style="color: var(--gray); font-size: 14px;">Решайте задачи без установки дополнительных программ</p>
+        </div>
+
+        <div class="card text-center card-hover">
+            <div class="icon-circle icon-circle-danger animate-float" style="animation-delay: 3s;">
+                <i class="fas fa-chart-line"></i>
+            </div>
+            <h3 style="margin-bottom: 10px;">Отслеживание прогресса</h3>
+            <p style="color: var(--gray); font-size: 14px;">Детальная статистика и визуализация успехов</p>
+        </div>
+    </div>
+</div>
+
+<div class="cta-section mt-4 card-gradient p-4 text-center" style="border-radius: var(--border-radius);">
+    <h2 style="font-size: 2.5rem; margin-bottom: 20px;">Начни свой путь в IT сегодня!</h2>
+    <p style="font-size: 1.2rem; color: var(--gray); margin-bottom: 30px; max-width: 800px; margin-left: auto; margin-right: auto;">
+        Python — самый востребованный язык программирования. Освой его в интерактивной игровой форме и открой двери в мир IT.
+    </p>
+
+    <div class="stats-grid mb-4" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; max-width: 800px; margin: 0 auto;">
+        <div class="stat-card">
+            <div class="stat-number" style="font-size: 2.5rem;">35+</div>
+            <div class="stat-label">Уроков</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" style="font-size: 2.5rem;">5</div>
+            <div class="stat-label">Уровней сложности</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" style="font-size: 2.5rem;">20+</div>
+            <div class="stat-label">Достижений</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" style="font-size: 2.5rem;">100%</div>
+            <div class="stat-label">Бесплатно</div>
+        </div>
+    </div>
+
+    {% if not 'user_id' in session %}
+    <a href="/register" class="btn btn-primary btn-lg" style="font-size: 1.2rem; padding: 20px 50px;">
+        <i class="fas fa-user-plus"></i> Присоединиться бесплатно
+    </a>
+    {% endif %}
+</div>
+
+<div class="testimonials-section mt-4">
+    <h2 class="card-title text-center mb-4">
+        <i class="fas fa-comments"></i>
+        Отзывы учеников
+    </h2>
+
+    <div class="grid grid-cols-3 gap-6">
+        <div class="card card-hover">
+            <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+                <div style="width: 50px; height: 50px; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 50%;"></div>
+                <div>
+                    <div style="font-weight: 600;">Алексей К.</div>
+                    <div style="font-size: 14px; color: var(--gray);">Начинающий разработчик</div>
+                </div>
+            </div>
+            <p style="color: var(--gray); font-style: italic;">
+                "Лучший способ учить Python! Игровая форма не дает заскучать, а прогресс виден сразу."
+            </p>
+            <div class="star-rating mt-2">
+                <span class="star active"><i class="fas fa-star"></i></span>
+                <span class="star active"><i class="fas fa-star"></i></span>
+                <span class="star active"><i class="fas fa-star"></i></span>
+                <span class="star active"><i class="fas fa-star"></i></span>
+                <span class="star active"><i class="fas fa-star"></i></span>
+            </div>
+        </div>
+
+        <div class="card card-hover">
+            <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+                <div style="width: 50px; height: 50px; background: linear-gradient(135deg, var(--success), #059669); border-radius: 50%;"></div>
+                <div>
+                    <div style="font-weight: 600;">Мария С.</div>
+                    <div style="font-size: 14px; color: var(--gray);">Студентка</div>
+                </div>
+            </div>
+            <p style="color: var(--gray); font-style: italic;">
+                "Очень понравилась система достижений и рейтинга. Хочется проходить все больше уроков!"
+            </p>
+            <div class="star-rating mt-2">
+                <span class="star active"><i class="fas fa-star"></i></span>
+                <span class="star active"><i class="fas fa-star"></i></span>
+                <span class="star active"><i class="fas fa-star"></i></span>
+                <span class="star active"><i class="fas fa-star"></i></span>
+                <span class="star"><i class="fas fa-star"></i></span>
+            </div>
+        </div>
+
+        <div class="card card-hover">
+            <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+                <div style="width: 50px; height: 50px; background: linear-gradient(135deg, var(--warning), #d97706); border-radius: 50%;"></div>
+                <div>
+                    <div style="font-weight: 600;">Дмитрий П.</div>
+                    <div style="font-size: 14px; color: var(--gray);">Middle Python Developer</div>
+                </div>
+            </div>
+            <p style="color: var(--gray); font-style: italic;">
+                "Даже опытным разработчикам есть чему поучиться. Особенно понравились продвинутые темы."
+            </p>
+            <div class="star-rating mt-2">
+                <span class="star active"><i class="fas fa-star"></i></span>
+                <span class="star active"><i class="fas fa-star"></i></span>
+                <span class="star active"><i class="fas fa-star"></i></span>
+                <span class="star active"><i class="fas fa-star"></i></span>
+                <span class="star active"><i class="fas fa-star"></i></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="learning-path mt-4 card p-4">
+    <h2 class="card-title text-center mb-4">
+        <i class="fas fa-road"></i>
+        Путь обучения
+    </h2>
+
+    <div style="display: flex; justify-content: space-between; align-items: center; position: relative; margin: 40px 0;">
+        <div style="flex: 1; text-align: center; position: relative;">
+            <div class="icon-circle" style="width: 70px; height: 70px; margin: 0 auto 15px; background: linear-gradient(135deg, #4caf50, #2e7d32);">
+                <i class="fas fa-seedling"></i>
+            </div>
+            <div style="font-weight: 600; margin-bottom: 5px;">Начальный</div>
+            <div style="font-size: 14px; color: var(--gray);">Уроки 1-10</div>
+        </div>
+
+        <div style="width: 100px; height: 4px; background: linear-gradient(90deg, #4caf50, #2196f3);"></div>
+
+        <div style="flex: 1; text-align: center;">
+            <div class="icon-circle" style="width: 70px; height: 70px; margin: 0 auto 15px; background: linear-gradient(135deg, #2196f3, #0d47a1);">
+                <i class="fas fa-graduation-cap"></i>
+            </div>
+            <div style="font-weight: 600; margin-bottom: 5px;">Базовый</div>
+            <div style="font-size: 14px; color: var(--gray);">Уроки 11-20</div>
+        </div>
+
+        <div style="width: 100px; height: 4px; background: linear-gradient(90deg, #2196f3, #ff9800);"></div>
+
+        <div style="flex: 1; text-align: center;">
+            <div class="icon-circle" style="width: 70px; height: 70px; margin: 0 auto 15px; background: linear-gradient(135deg, #ff9800, #e65100);">
+                <i class="fas fa-bolt"></i>
+            </div>
+            <div style="font-weight: 600; margin-bottom: 5px;">Средний</div>
+            <div style="font-size: 14px; color: var(--gray);">Уроки 21-25</div>
+        </div>
+
+        <div style="width: 100px; height: 4px; background: linear-gradient(90deg, #ff9800, #9c27b0);"></div>
+
+        <div style="flex: 1; text-align: center;">
+            <div class="icon-circle" style="width: 70px; height: 70px; margin: 0 auto 15px; background: linear-gradient(135deg, #9c27b0, #6a1b9a);">
+                <i class="fas fa-rocket"></i>
+            </div>
+            <div style="font-weight: 600; margin-bottom: 5px;">Продвинутый</div>
+            <div style="font-size: 14px; color: var(--gray);">Уроки 26-30</div>
+        </div>
+
+        <div style="width: 100px; height: 4px; background: linear-gradient(90deg, #9c27b0, #f44336);"></div>
+
+        <div style="flex: 1; text-align: center;">
+            <div class="icon-circle" style="width: 70px; height: 70px; margin: 0 auto 15px; background: linear-gradient(135deg, #f44336, #b71c1c);">
+                <i class="fas fa-crown"></i>
+            </div>
+            <div style="font-weight: 600; margin-bottom: 5px;">Экспертный</div>
+            <div style="font-size: 14px; color: var(--gray);">Уроки 31-35</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Анимация счетчиков на главной странице
+    document.addEventListener('DOMContentLoaded', function() {
+        const stats = document.querySelectorAll('.stat-number');
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const target = parseInt(entry.target.innerText.replace(/\D/g, ''));
+                    animateCounter(entry.target, target, 1500);
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        stats.forEach(stat => observer.observe(stat));
+
+        // Параллакс для героя
+        const hero = document.querySelector('.hero-section');
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const rate = scrolled * -0.5;
+            hero.style.transform = `translateY(${rate}px)`;
+        });
+    });
+</script>
+{% endblock %}

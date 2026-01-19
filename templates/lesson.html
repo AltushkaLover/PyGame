@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}{{ lesson.title }} - Python Master{% endblock %}
+{% block content %}
+<div>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+        <div>
+            <h1>Урок {{ lesson.order_num }}: {{ lesson.title }}</h1>
+            <p style="color: #666;">{{ lesson.description }}</p>
+        </div>
+
+        <div style="background: #ff9800; color: white; padding: 10px 20px; border-radius: 5px;">
+            +{{ lesson.xp_reward }} XP
+        </div>
+    </div>
+
+    <div class="card" style="margin-bottom: 30px;">
+        <h3 style="margin-bottom: 15px;">📚 Теория</h3>
+        <div style="white-space: pre-line; line-height: 1.6; padding: 20px; background: #f8f9fa; border-radius: 5px;">
+            {{ lesson.content }}
+        </div>
+    </div>
+
+    <div class="card" style="margin-bottom: 30px;">
+        <h3 style="margin-bottom: 15px;">💻 Пример кода</h3>
+        <pre style="background: #2d2d2d; color: #fff; padding: 20px; border-radius: 5px; overflow-x: auto;">{{ lesson.code_example }}</pre>
+    </div>
+
+    <div class="card">
+        <h3 style="margin-bottom: 15px;">🎯 Задание</h3>
+        <div style="background: #e8f4fd; padding: 20px; border-radius: 5px; margin-bottom: 20px;">
+            <p style="font-weight: bold;">{{ lesson.exercise }}</p>
+        </div>
+
+        {% if lesson.hints %}
+        <div style="background: #fff3cd; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+            <p><strong>💡 Подсказка:</strong> {{ lesson.hints }}</p>
+        </div>
+        {% endif %}
+
+        <div style="display: flex; gap: 15px; margin-top: 20px;">
+            <a href="/practice/{{ lesson.id }}" class="btn btn-primary">
+                Перейти к практике
+            </a>
+
+            {% if prev_id %}
+            <a href="/lesson/{{ prev_id }}" class="btn btn-secondary">
+                ← Предыдущий
+            </a>
+            {% endif %}
+
+            {% if next_id %}
+            <a href="/lesson/{{ next_id }}" class="btn btn-primary">
+                Следующий →
+            </a>
+            {% endif %}
+
+            <a href="/dashboard" class="btn btn-secondary">
+                К урокам
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
