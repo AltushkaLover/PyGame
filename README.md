@@ -37,7 +37,7 @@
 Bash
 
 # 1. Клонируйте репозиторий
-git clone https://github.com/yourusername/python-master.git
+git clone [https://github.com/yourusername/python-master.git](https://github.com/AltushkaLover/PyGame)
 cd python-master
 
 # 2. Создайте виртуальное окружение (опционально)
